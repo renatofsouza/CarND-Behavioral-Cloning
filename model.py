@@ -34,7 +34,7 @@ def read_data(path, augment_data=False):
             #filename = source_path.split("\\")[-1]
             filename = source_path.split("/")[-1]
             image_path = "data/IMG/" + filename
-            image = cv2.imread(image_path)
+            image = preprocess_image(cv2.imread(image_path))
             #imgplot = plt.imshow(image)
             #plt.show()
             images.append(image)
@@ -49,6 +49,28 @@ def read_data(path, augment_data=False):
                 measurements.append(measurement * -1.0) # Augment data by flipping the angle
 
     return np.array(images), np.array(measurements)
+
+def preprocess_image(img):
+    '''
+    Method for preprocessing images: this method is the same used in drive.py, except this version uses
+    BGR to YUV and drive.py uses RGB to YUV (due to using cv2 to read the image here, where drive.py images are 
+    received in RGB)
+    '''
+    # original shape: 160x320x3, input shape for neural net: 66x200x3
+    # crop to 105x320x3
+    #new_img = img[35:140,:,:]
+    # crop to 40x320x3
+    new_img = img[50:140,:,:]
+    # apply subtle blur
+    new_img = cv2.GaussianBlur(new_img, (3,3), 0)
+    # scale to 66x200x3 (same as nVidia)
+    new_img = cv2.resize(new_img,(200, 66), interpolation = cv2.INTER_AREA)
+    # scale to ?x?x3
+    #new_img = cv2.resize(new_img,(80, 10), interpolation = cv2.INTER_AREA)
+    # convert to YUV color space (as nVidia paper suggests)
+    new_img = cv2.cvtColor(new_img, cv2.COLOR_BGR2YUV)
+    return new_img
+
 
 def train_model_simple(X_train, y_train):
     model = Sequential()
@@ -68,8 +90,8 @@ def train_model(X_train, y_train):
     model = Sequential()
     
     # Normalize
-    model.add(Lambda(lambda x: x/127.5 - 1.0,input_shape=(160,320,3)))
-    
+    #model.add(Lambda(lambda x: x/127.5 - 1.0,input_shape=(160,320,3)))
+    model.add(Lambda(lambda x: x/127.5 - 1.0,input_shape=(66,200,3)))
     #cropping to remove sky and hood of the car
     #model.add(Cropping2D(cropping=((70,25),(0,0)))) 
     
