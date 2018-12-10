@@ -93,5 +93,3 @@ During the process of loading the data in the read_data function I discard any d
 Then I add +0.25 and -0.25 to the angle measurement of the left and right cameras. 
 
 Lastly, I augment the data by fliping horizontally and inverting steering angle of every image where the magnitude of the steering angle  is > 0.33. This process helps remove bias since the track mostly has turns to one side. 
-
-#### 5. Data Augmentation and Data Filtering

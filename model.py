@@ -109,8 +109,6 @@ def train_model(X_train, y_train):
     model.add(Convolution2D(48, 5, 5, subsample=(2, 2), border_mode='valid', W_regularizer=l2(0.001)))
     model.add(ELU())
 
-    #model.add(Dropout(0.50))
-    
     # Add two 3x3 convolution layers (output depth 64, and 64)
     model.add(Convolution2D(64, 3, 3, border_mode='valid', W_regularizer=l2(0.001)))
     model.add(ELU())
@@ -123,21 +121,16 @@ def train_model(X_train, y_train):
     # Add three fully connected layers (depth 100, 50, 10), tanh activation (and dropouts)
     model.add(Dense(100, W_regularizer=l2(0.001)))
     model.add(ELU())
-    #model.add(Dropout(0.50))
     model.add(Dense(50, W_regularizer=l2(0.001)))
     model.add(ELU())
-    #model.add(Dropout(0.50))
     model.add(Dense(10, W_regularizer=l2(0.001)))
     model.add(ELU())
-    #model.add(Dropout(0.50))
 
     # Add a fully connected output layer
     model.add(Dense(1))
 
     # Compile and train the model, 
-    #model.compile('adam', 'mean_squared_error')
     model.compile(optimizer=Adam(lr=1e-4), loss='mse')
-    #model.compile(loss = 'mse', optimizer = 'adam')
     model.fit(X_train, y_train,validation_split=0.2, shuffle= True,epochs=6 )
     model.save('model.h5')
 
