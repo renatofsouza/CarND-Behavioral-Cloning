@@ -29,6 +29,10 @@ def read_data(path, augment_data=False):
     measurements = []
 
     for line in lines:
+        # skip it if ~0 speed - not representative of driving behavior
+        if float(line[6]) < 0.1 :
+            continue
+
         for i in range(3): #read all three cameras 0=center, 1=left, 2=right 
             source_path = line[i]
             #filename = source_path.split("\\")[-1]
@@ -44,7 +48,9 @@ def read_data(path, augment_data=False):
             elif i == 2: #
                 measurement -= 0.25    
             measurements.append(measurement)
-            if augment_data == True:    
+            
+            # flip horizontally and invert steer angle, if magnitude is > 0.33
+            if augment_data == True and abs(measurement) > 0.33:    
                 images.append(cv2.flip(image, 1)) # Augment data by flipping the image
                 measurements.append(measurement * -1.0) # Augment data by flipping the angle
 
