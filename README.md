@@ -21,6 +21,7 @@ The goals / steps of this project are the following:
 [image1]: ./examples/nVidia_model.png "Model Visualization"
 [image2]: ./examples/center_2018_12_09_17_34_08_167.jpg "example 1"
 [image3]: ./examples/center_2018_12_09_17_33_05_974.jpg "example 2"
+[image4]: ./examples/VideoSample.png "Video output"
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
@@ -79,7 +80,7 @@ Below are some sample images.
 ![Example 2][image3]
 
 
-####4. Preprocess Data
+#### 4. Preprocess Data
 
 I created a function to preprocess the data. My pre-process function basically executes the following steps:
 - Crops the image to remove the sky and hood of the car as the neural network does not need to learn about these features. 
@@ -94,4 +95,8 @@ Then I add +0.25 and -0.25 to the angle measurement of the left and right camera
 
 Lastly, I augment the data by fliping horizontally and inverting steering angle of every image where the magnitude of the steering angle  is > 0.33. This process helps remove bias since the track mostly has turns to one side. 
 
-#### 5. Data Augmentation and Data Filtering
+### Video Output
+
+Below is a link to the video outpot of my car being driven by the neural network model. 
+
+[![Video Output][image4]](https://youtu.be/NHcDFnmteXQ)
